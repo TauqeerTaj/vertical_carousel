@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import axios from 'axios'
 import cn from "classnames";
 // import { ReactComponent as Next } from "./assets/chevronDown.svg";
 // import { ReactComponent as Prev } from "./assets/chevronUp.svg";
@@ -12,8 +13,10 @@ import "./VerticalCarousel.css";
 
 const App = ({ data }) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [question, setQuestion] = useState('')
-  const [showOptionLabel, setShowOptionLabel] = useState(false)
+  const [question, setQuestion] = useState(data[0].introline)
+  const [showOptionLabel, setShowOptionLabel] = useState('')
+  const [selectedOptionLabel, setSelectedOptionLabel] = useState('')
+  const [summary, setSummary] = useState([])
 
   // Used to determine which items appear above the active item
   const halfwayIndex = Math.ceil(data?.length / 2);
@@ -67,6 +70,28 @@ const App = ({ data }) => {
       return prevIndex - 1;
     });
   };
+
+  const selectOption = (question, answer) => {
+    setSelectedOptionLabel(answer)
+    setSummary([...summary, { question, answer }])
+    setActiveIndex(activeIndex => activeIndex + 1)
+  }
+
+  const submitHandler = async () => {
+    try {
+
+      const result = await axios.post('https://carousel-task-851ad-default-rtdb.europe-west1.firebasedatabase.app/carousel.json', { summary })
+      console.log("api result:", result)
+
+    } catch (error) {
+      console.log("api error:", error)
+    }
+  }
+
+  useEffect(() => {
+    setQuestion(data[activeIndex].introline)
+    setSelectedOptionLabel('')
+  }, [activeIndex])
 
   return (
     <div className="container">
@@ -128,7 +153,12 @@ const App = ({ data }) => {
               </div>
             </div>
           </div>
-
+          {
+            activeIndex === data.length - 1 &&
+            <div className="submit">
+              <button onClick={() => submitHandler()}>Submit</button>
+            </div>
+          }
           {/* <button
             type="button"
             className="carousel-button next"
@@ -143,12 +173,27 @@ const App = ({ data }) => {
             alt={data[activeIndex]?.content?.introline}
           />
           <p>{data[activeIndex]?.content?.copy}</p> */}
-          {data[activeIndex]?.hoverContent?.map(item => (
+          {activeIndex !== data.length - 1 ? data[activeIndex]?.hoverContent?.map(item => (
             <div className="options">
-              <img src={item.image} onMouseEnter={() => setShowOptionLabel(true)} />
-              {showOptionLabel && <span>{item.label}</span>}
+              <img src={item.image} onMouseEnter={() => setShowOptionLabel(item.label)} onMouseLeave={() => setShowOptionLabel(selectedOptionLabel)} onClick={() => selectOption(data[activeIndex].introline, item.label)} />
+              {(showOptionLabel === item.label || selectedOptionLabel === item.label) && <span>{item.label}</span>}
             </div>
-          ))}
+          )) :
+            <ul>
+              {summary.map(item => (
+                <li>
+                  <div>
+                    <h3>Question:</h3>
+                    <span>{item.question}</span>
+                  </div>
+                  <div>
+                    <h3>Answer:</h3>
+                    <span>{item.answer}</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          }
         </div>
       </section>
     </div>

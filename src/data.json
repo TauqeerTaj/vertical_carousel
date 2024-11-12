@@ -10,45 +10,109 @@
         "hoverContent": [
           {
             "image": "like.webp",
-            "label": "Like"
+            "label": "Good"
           },
           {
             "image": "think.webp",
-            "label": "Think"
+            "label": "Not Sure"
           },
           {
             "image": "unLike.webp",
-            "label": "UnLike"
+            "label": "Bad"
           }
         ]
       },
       {
-        "introline": "elephants",
+        "introline": "Will it rain tomorrow?",
         "id": "elephants",
         "content": {
           "image": "https://via.placeholder.com/400x200?text=Elephants",
           "copy": "Elephant ipsum dolor sit amet, consectetur adipiscing elit. Morbi accumsan est ornare, ultricies erat a, dapibus lectus."
-        }
+        },
+        "hoverContent": [
+          {
+            "image": "like.webp",
+            "label": "yes"
+          },
+          {
+            "image": "think.webp",
+            "label": "Not Sure"
+          },
+          {
+            "image": "unLike.webp",
+            "label": "No"
+          }
+        ]
       },
       {
-        "introline": "bears",
+        "introline": "How was your experience at the doctor's office today?",
         "id": "bears",
         "content": {
           "image": "https://via.placeholder.com/400x200?text=Bears",
           "copy": "Bears ipsum dolor sit amet, consectetur adipiscing elit. Morbi accumsan est ornare, ultricies erat a, dapibus lectus."
-        }
+        },
+        "hoverContent": [
+          {
+            "image": "like.webp",
+            "label": "Good"
+          },
+          {
+            "image": "think.webp",
+            "label": "Not Sure"
+          },
+          {
+            "image": "unLike.webp",
+            "label": "Bad"
+          }
+        ]
       },
       {
-        "introline": "lizards",
+        "introline": "How was your lunch?",
         "id": "lizards",
         "content": {
           "image": "https://via.placeholder.com/400x200?text=Lizards",
           "copy": "Lizards ipsum dolor sit amet, consectetur adipiscing elit. Morbi accumsan est ornare, ultricies erat a, dapibus lectus."
-        }
+        },
+        "hoverContent": [
+          {
+            "image": "like.webp",
+            "label": "Good"
+          },
+          {
+            "image": "think.webp",
+            "label": "Not Sure"
+          },
+          {
+            "image": "unLike.webp",
+            "label": "Bad"
+          }
+        ]
       },
       {
-        "introline": "snakes",
+        "introline": "How is your day going so far?",
         "id": "snakes",
+        "content": {
+          "image": "https://via.placeholder.com/400x200?text=Snakes",
+          "copy": "Snakes ipsum dolor sit amet, consectetur adipiscing elit. Morbi accumsan est ornare, ultricies erat a, dapibus lectus."
+        },
+        "hoverContent": [
+          {
+            "image": "like.webp",
+            "label": "Good"
+          },
+          {
+            "image": "think.webp",
+            "label": "Not Sure"
+          },
+          {
+            "image": "unLike.webp",
+            "label": "Bad"
+          }
+        ]
+      },
+      {
+        "introline": "Summary",
+        "id": "summary",
         "content": {
           "image": "https://via.placeholder.com/400x200?text=Snakes",
           "copy": "Snakes ipsum dolor sit amet, consectetur adipiscing elit. Morbi accumsan est ornare, ultricies erat a, dapibus lectus."

@@ -56,6 +56,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: scroll;
   }
   .outer-container .content img{
     width: 50px;
@@ -74,6 +75,21 @@
     position: absolute;
     left: 0;
     top: -20px;
+    transition: 10s;
+  }
+  .outer-container .content ul{
+    padding: 0px;
+    margin-top: 100px;
+    list-style: none;
+  }
+  .outer-container .content ul li{
+    background-color: #ccc;
+    margin: 20px 0px;
+    padding: 10px;
+  }
+  
+  .outer-container .content ul li h3{
+    margin: 0
   }
 
   .leading-text {
@@ -181,3 +197,15 @@
     opacity: 1;
   }
   
+  .submit{
+    text-align: center;
+  }
+  .submit button{
+    background-color: #04AA6D;
+    color:var(--white);
+    width: 200px;
+    border: none;
+    font-weight: bold;
+    padding:5px 8px;
+    border-radius: 5px;
+  }
