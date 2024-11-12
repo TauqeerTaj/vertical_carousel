@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import axios from 'axios'
+import LoadingBar from 'react-top-loading-bar'
 import cn from "classnames";
 // import { ReactComponent as Next } from "./assets/chevronDown.svg";
 // import { ReactComponent as Prev } from "./assets/chevronUp.svg";
@@ -17,6 +18,8 @@ const App = ({ data }) => {
   const [showOptionLabel, setShowOptionLabel] = useState('')
   const [selectedOptionLabel, setSelectedOptionLabel] = useState('')
   const [summary, setSummary] = useState([])
+
+  const loadingRef = useRef(null)
 
   // Used to determine which items appear above the active item
   const halfwayIndex = Math.ceil(data?.length / 2);
@@ -78,23 +81,31 @@ const App = ({ data }) => {
   }
 
   const submitHandler = async () => {
+    loadingRef.current.continuousStart()
     try {
 
       const result = await axios.post('https://carousel-task-851ad-default-rtdb.europe-west1.firebasedatabase.app/carousel.json', { summary })
-      console.log("api result:", result)
+      if (result) {
+        loadingRef.current.complete()
+        setActiveIndex(0)
+        setSummary([])
+        setSelectedOptionLabel('')
+      }
 
     } catch (error) {
+      loadingRef.current.complete()
       console.log("api error:", error)
     }
   }
 
   useEffect(() => {
     setQuestion(data[activeIndex].introline)
-    setSelectedOptionLabel('')
+    // setSelectedOptionLabel('')
   }, [activeIndex])
 
   return (
     <div className="container">
+      <LoadingBar color='#f11946' ref={loadingRef} />
       <section className="outer-container">
         <div className="carousel-wrapper">
           {/* <button
@@ -159,24 +170,14 @@ const App = ({ data }) => {
               <button onClick={() => submitHandler()}>Submit</button>
             </div>
           }
-          {/* <button
-            type="button"
-            className="carousel-button next"
-            onClick={() => handleClick("next")}
-          >
-            Next
-          </button> */}
         </div>
         <div className="content">
-          {/* <img
-            src={data[activeIndex]?.content?.image}
-            alt={data[activeIndex]?.content?.introline}
-          />
-          <p>{data[activeIndex]?.content?.copy}</p> */}
           {activeIndex !== data.length - 1 ? data[activeIndex]?.hoverContent?.map(item => (
             <div className="options">
               <img src={item.image} onMouseEnter={() => setShowOptionLabel(item.label)} onMouseLeave={() => setShowOptionLabel(selectedOptionLabel)} onClick={() => selectOption(data[activeIndex].introline, item.label)} />
-              {(showOptionLabel === item.label || selectedOptionLabel === item.label) && <span>{item.label}</span>}
+              {
+                summary.map(row => (row.question === data[activeIndex].introline && row.answer === item.label) && <span>{item.label}</span>)
+              }
             </div>
           )) :
             <ul>
