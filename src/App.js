@@ -2,105 +2,67 @@ import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import axios from 'axios'
 import LoadingBar from 'react-top-loading-bar'
-import cn from "classnames";
-// import { ReactComponent as Next } from "./assets/chevronDown.svg";
-// import { ReactComponent as Prev } from "./assets/chevronUp.svg";
+import { useSnackbar } from 'react-simple-snackbar'
 import "./VerticalCarousel.css";
+import Summary from "./components/Summary";
+import Options from "./components/Options";
 
-/*
- * Read the blog post here:
- * https://letsbuildui.dev/articles/building-a-vertical-carousel-component-in-react
- */
 
 const App = ({ data }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [question, setQuestion] = useState(data[0].introline)
-  const [showOptionLabel, setShowOptionLabel] = useState('')
-  const [selectedOptionLabel, setSelectedOptionLabel] = useState('')
   const [summary, setSummary] = useState([])
+  const [animate, setAnimate] = useState(true)
 
   const loadingRef = useRef(null)
+  const [openSnackbar] = useSnackbar()
 
-  // Used to determine which items appear above the active item
-  const halfwayIndex = Math.ceil(data?.length / 2);
-
-  // Usd to determine the height/spacing of each item
-  const itemHeight = 20;
-
-  // Used to determine at what point an item is moved from the top to the bottom
-  const shuffleThreshold = halfwayIndex * itemHeight;
-
-  // Used to determine which items should be visible. this prevents the "ghosting" animation
-  const visibleStyleThreshold = shuffleThreshold / 2;
-
-  const determinePlacement = (itemIndex) => {
-    // If these match, the item is active
-    if (activeIndex === itemIndex) return 0;
-
-    if (itemIndex >= halfwayIndex) {
-      if (activeIndex > itemIndex - halfwayIndex) {
-        return (itemIndex - activeIndex) * itemHeight;
-      } else {
-        return -(data.length + activeIndex - itemIndex) * itemHeight;
-      }
-    }
-
-    if (itemIndex > activeIndex) {
-      return (itemIndex - activeIndex) * itemHeight;
-    }
-
-    if (itemIndex < activeIndex) {
-      if ((activeIndex - itemIndex) * itemHeight >= shuffleThreshold) {
-        return (data.length - (activeIndex - itemIndex)) * itemHeight;
-      }
-      return -(activeIndex - itemIndex) * itemHeight;
-    }
-  };
-
-  const handleClick = (direction) => {
-    setActiveIndex((prevIndex) => {
-      if (direction === "next") {
-        if (prevIndex + 1 > data?.length - 1) {
-          return 0;
-        }
-        return prevIndex + 1;
-      }
-
-      if (prevIndex - 1 < 0) {
-        return data?.length - 1;
-      }
-
-      return prevIndex - 1;
-    });
-  };
 
   const selectOption = (question, answer) => {
-    setSelectedOptionLabel(answer)
-    setSummary([...summary, { question, answer }])
+    setAnimate(false)
+    setTimeout(() => {
+      setAnimate(true)
+    }, 100)
     setActiveIndex(activeIndex => activeIndex + 1)
+    const questionExist = summary.find(obj => obj.question === question)
+    if (questionExist) {
+      const index = summary.findIndex(obj => obj.question === question)
+      questionExist.answer = answer
+      summary.splice(index, 1, questionExist)
+    } else {
+      setSummary([...summary, { question, answer }])
+    }
   }
 
   const submitHandler = async () => {
     loadingRef.current.continuousStart()
     try {
-
       const result = await axios.post('https://carousel-task-851ad-default-rtdb.europe-west1.firebasedatabase.app/carousel.json', { summary })
       if (result) {
         loadingRef.current.complete()
+        openSnackbar("Successfully Submitted!")
         setActiveIndex(0)
         setSummary([])
-        setSelectedOptionLabel('')
       }
 
     } catch (error) {
       loadingRef.current.complete()
+      openSnackbar("Something Went Wrong!")
       console.log("api error:", error)
     }
   }
 
+  const buttonClickHandler = (i, introline) => {
+    setAnimate(false)
+    setTimeout(() => {
+      setAnimate(true)
+    }, 100)
+    setActiveIndex(i)
+    setQuestion(introline)
+  }
+
   useEffect(() => {
     setQuestion(data[activeIndex].introline)
-    // setSelectedOptionLabel('')
   }, [activeIndex])
 
   return (
@@ -108,13 +70,6 @@ const App = ({ data }) => {
       <LoadingBar color='#f11946' ref={loadingRef} />
       <section className="outer-container">
         <div className="carousel-wrapper">
-          {/* <button
-            type="button"
-            className="carousel-button prev"
-            onClick={() => handleClick("prev")}
-          >
-            Previous
-          </button> */}
 
           <div className="carousel">
             <div className="slides">
@@ -122,78 +77,36 @@ const App = ({ data }) => {
                 {data?.map((item, i) => (
                   <button
                     type="button"
-                    onClick={() => (
-                      setActiveIndex(i), setQuestion(item.introline)
-                    )}
+                    onClick={() => buttonClickHandler(i, item.introline)}
                     className={`carousel-item ${activeIndex === i && 'activeItem'}`}
-                    // className={cn("carousel-item", {
-                    //   active: activeIndex === i,
-                    //   visible:
-                    //     Math.abs(determinePlacement(i)) <= visibleStyleThreshold
-                    // })}
                     key={item.id}
-                  // style={{
-                  //   transform: `translateY(${determinePlacement(i)}px)`
-                  // }}
                   >
-                    {/* {item.introline} */}
                   </button>
                 ))}
               </div>
-              {/* <div className="carousel-inner">
-                {data?.map((item, i) => (
-                  <button
-                    type="button"
-                    onClick={() => setActiveIndex(i)}
-                    className={cn("carousel-item", {
-                      active: activeIndex === i,
-                      visible:
-                        Math.abs(determinePlacement(i)) <= visibleStyleThreshold
-                    })}
-                    key={item.id}
-                    style={{
-                      transform: `translateY(${determinePlacement(i)}px)`
-                    }}
-                  >
-                    {item.introline}
-                  </button>
-                ))}
-              </div> */}
-              <div style={{ marginLeft: 50 }}>
-                <h2>{question}</h2>
-              </div>
+              {animate && <div style={{ marginLeft: 50 }}>
+                <h2 className="questionAnimation">{question}</h2>
+              </div>}
             </div>
           </div>
           {
             activeIndex === data.length - 1 &&
-            <div className="submit">
+            <div className="submit" getBy>
               <button onClick={() => submitHandler()}>Submit</button>
             </div>
           }
         </div>
         <div className="content">
           {activeIndex !== data.length - 1 ? data[activeIndex]?.hoverContent?.map(item => (
-            <div className="options">
-              <img src={item.image} onMouseEnter={() => setShowOptionLabel(item.label)} onMouseLeave={() => setShowOptionLabel(selectedOptionLabel)} onClick={() => selectOption(data[activeIndex].introline, item.label)} />
-              {
-                summary.map(row => (row.question === data[activeIndex].introline && row.answer === item.label) && <span>{item.label}</span>)
-              }
-            </div>
+            <Options
+              item={item}
+              selectOption={selectOption}
+              data={data}
+              activeIndex={activeIndex}
+              summary={summary}
+            />
           )) :
-            <ul>
-              {summary.map(item => (
-                <li>
-                  <div>
-                    <h3>Question:</h3>
-                    <span>{item.question}</span>
-                  </div>
-                  <div>
-                    <h3>Answer:</h3>
-                    <span>{item.answer}</span>
-                  </div>
-                </li>
-              ))}
-            </ul>
+            <Summary summary={summary} />
           }
         </div>
       </section>

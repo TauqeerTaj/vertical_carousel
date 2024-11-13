@@ -1,8 +1,9 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('check API running', async () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  fireEvent.click(screen.getByText(/submit/i));
+  await waitFor(() => screen.getByText(/Successfully Submitted!/i));
+  expect(screen.getByText(/Successfully Submitted!/i)).toBeInTheDocument();
 });

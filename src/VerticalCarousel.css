@@ -58,39 +58,6 @@
     align-items: center;
     overflow: scroll;
   }
-  .outer-container .content img{
-    width: 50px;
-    margin: 0px 10px;
-    cursor: pointer;
-  }
-
-  .outer-container .content .options{
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .outer-container .content .options span{
-    position: absolute;
-    left: 0;
-    top: -20px;
-    transition: 10s;
-  }
-  .outer-container .content ul{
-    padding: 0px;
-    margin-top: 100px;
-    list-style: none;
-  }
-  .outer-container .content ul li{
-    background-color: #ccc;
-    margin: 20px 0px;
-    padding: 10px;
-  }
-  
-  .outer-container .content ul li h3{
-    margin: 0
-  }
 
   .leading-text {
     display: flex;
@@ -130,59 +97,7 @@
     width: 100%;
   }
   
-  /* .carousel-inner {
-    position: relative;
-    max-height: 250px;
-    height: 250px;
-  } */
-  
-  /* .carousel-inner::before,
-  .carousel-inner::after {
-    content: "";
-    z-index: 1;
-    position: absolute;
-    width: 100%;
-    height: 110px;
-    pointer-events: none;
-  } */
-  
-  /* .carousel-inner::before {
-    top: 0;
-    background: linear-gradient(
-      0deg,
-      hsla(0, 0%, 100%, 0) 0%,
-      hsla(27, 100%, 48%, 1) 100%
-    );
-  }
-  
-  .carousel-inner::after {
-    bottom: 0;
-    background: linear-gradient(
-      0deg,
-      hsla(27, 100%, 48%, 1) 0%,
-      hsla(0, 0%, 100%, 0) 100%
-    );
-  } */
-  /* .carousel-inner button {
-    display: flex;
-    border: 1px solid #fff;
-    border-radius: 100%;
-    padding: 5px;
-    margin-bottom: 5px;
-  } */
-  
   .carousel-item {
-    /* position: absolute;
-    background: none;
-    border: none;
-    padding: 5px;
-    margin: 0;
-    opacity: 0;
-    top: 112px;
-    transition: transform 0.4s ease, opacity 0.4s ease;
-    background-color: red;
-    border: 1px solid #fff;
-    border-radius: 100%; */
     display: flex;
     border: 1px solid var(--white);
     border-radius: 100%;
@@ -208,4 +123,13 @@
     font-weight: bold;
     padding:5px 8px;
     border-radius: 5px;
+  }
+
+  .questionAnimation{
+    animation: fadeIn 2s;
+  }
+
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
   }

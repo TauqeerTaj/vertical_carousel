@@ -1,0 +1,40 @@
+.options{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+.options span{
+    position: absolute;
+    left: 10;
+    top: -30px;
+    font-size: 12px;
+    transition: 10s;
+  }
+
+  .options img{
+    width: 50px;
+    margin: 0px 10px;
+    cursor: pointer;
+  }
+
+  .selectedLabel{
+    background: lightgreen;
+    color: red;
+    padding: 5px;
+    border-radius: 8px;
+  }
+
+  .label {
+    background: #fff;
+    color: #000;
+    padding: 5px;
+    border-radius: 8px;
+    animation: rotateLabel 1s;
+  }
+
+  @keyframes rotateLabel {
+    0% { top: -20px }
+    100% { top: -30px}
+  }

@@ -1,0 +1,19 @@
+.summary {
+  width: 100%;
+}
+
+ul{
+    padding: 0px;
+    margin: 0px;
+    list-style: none;
+  }
+  
+ ul li{
+    background-color: #ccc;
+    margin: 20px 0px;
+    padding: 10px;
+  }
+  
+  ul li h3{
+    margin: 0
+  }

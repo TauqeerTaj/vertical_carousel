@@ -4,11 +4,14 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import data from "./data.json";
+import SnackbarProvider from 'react-simple-snackbar'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App data={data.slides} />
+    <SnackbarProvider>
+      <App data={data.slides} />
+    </SnackbarProvider>
   </React.StrictMode>
 );
 
