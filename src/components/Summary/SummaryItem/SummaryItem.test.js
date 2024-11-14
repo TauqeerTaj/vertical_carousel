@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import SummaryItem from ".";
+import SummaryItem from "../SummaryItem";
 
 test('Find "Qestion" and "Answer" heading',
     () => {

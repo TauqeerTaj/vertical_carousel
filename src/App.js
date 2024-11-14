@@ -5,8 +5,8 @@ import LoadingBar from "react-top-loading-bar";
 import { useSnackbar } from "react-simple-snackbar";
 import { Row, Col } from "reactstrap";
 import "./VerticalCarousel.css";
-import Summary from "./components/Summary";
 import Options from "./components/Options";
+import Summary from "./components/Summary"
 
 const App = ({ data }) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -80,9 +80,8 @@ const App = ({ data }) => {
                       <button
                         type="button"
                         onClick={() => buttonClickHandler(i, item.introline)}
-                        className={`carousel-item ${
-                          activeIndex === i && "activeItem"
-                        }`}
+                        className={`carousel-item ${activeIndex === i && "activeItem"
+                          }`}
                         key={item.id}
                       ></button>
                     ))}
@@ -95,7 +94,7 @@ const App = ({ data }) => {
                 </div>
               </div>
               {activeIndex === data.length - 1 && (
-                <div className="submit" getBy>
+                <div className="submit">
                   <button onClick={() => submitHandler()}>Submit</button>
                 </div>
               )}
